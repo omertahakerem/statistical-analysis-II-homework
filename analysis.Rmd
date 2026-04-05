@@ -1,0 +1,62 @@
+---
+title: "Statistical Analysis II Homework"
+author: "Omer Taha Kerem"
+date: "2026-04-05"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readxl)
+
+veri <- read_excel("paired_veri.xlsx", sheet = 3)
+
+x <- veri$`Veri 69`
+
+# [TR] Shapiro-Wilk normallik testi uygulanmıştır.
+# [EN] Shapiro-Wilk normality test was applied.
+
+shapiro.test(x)
+
+# [TR] p-değeri > 0.05 olduğu için veri normal dağılım göstermektedir.
+# [TR] Bu nedenle parametrik test (paired t-test) kullanılacaktır.
+
+# [EN] Since p-value > 0.05, the data is normally distributed.
+# [EN] Therefore, a parametric test (paired t-test) will be used.
+
+once <- x[1:20]
+sonra <- x[21:40]
+
+# [TR] Bağımlı örneklem t-testi uygulanmıştır.
+# [EN] Paired sample t-test was applied.
+
+t.test(once, sonra, paired = TRUE)
+
+# [TR] p-değeri > 0.05 olduğu için anlamlı fark yoktur.
+# [EN] There is no statistically significant difference.
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
