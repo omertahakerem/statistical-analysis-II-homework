@@ -1,0 +1,102 @@
+---
+title: "Statistical Analysis II - Homework 3"
+author: "Omer Taha Kerem"
+date: "2026-04-06"
+output: pdf_document
+---
+
+## Introduction
+
+[EN] In this study, it is investigated whether there is a statistically significant difference between the mean exam scores of students from three different schools (A, B, and C).
+
+[TR] Bu çalışmada, A, B ve C olmak üzere üç farklı okuldan mezun öğrencilerin sınav puan ortalamaları arasında istatistiksel olarak anlamlı bir fark olup olmadığı incelenmektedir.
+
+## Hypotheses
+
+[EN] H0: muA = muB = muC  
+[EN] H1: At least one group mean is different.
+
+[TR] H0: muA = muB = muC
+[TR] H1: En az bir grubun ortalaması farklıdır.
+
+## Data Preparation
+
+[EN] The dataset is read from the Excel file and the relevant columns for Veri 69 are selected.
+
+[TR] Veri seti Excel dosyasından okunmuş ve Veri 69’a ait sütunlar seçilmiştir.
+
+```{r}
+library(readxl)
+
+df <- read_excel("veri_one_way.xlsx", sheet = "veri_57-112")
+
+veri69 <- df[-1, c("Veri 69", "...26")]
+colnames(veri69) <- c("Puan", "Okul")
+
+veri69$Puan <- as.numeric(veri69$Puan)
+
+head(veri69)
+```
+
+## Normality Test
+
+[EN] Before applying One-Way ANOVA, the normality assumption must be checked using the Shapiro-Wilk test.
+
+[TR] Tek yönlü ANOVA uygulanmadan önce normallik varsayımı Shapiro-Wilk testi ile kontrol edilir.
+
+```{r}
+A <- veri69$Puan[veri69$Okul == "A"]
+B <- veri69$Puan[veri69$Okul == "B"]
+C <- veri69$Puan[veri69$Okul == "C"]
+
+shapiro.test(A)
+shapiro.test(B)
+shapiro.test(C)
+```
+
+## Interpretation of Normality Test
+
+[EN] Since all p-values are greater than 0.05, the normality assumption is satisfied.
+
+[TR] Tüm p-değerleri 0.05’ten büyük olduğu için normallik varsayımı sağlanmıştır.
+
+## Homogeneity of Variances
+
+[EN] Bartlett’s test is applied to check whether group variances are equal.
+
+[TR] Grupların varyanslarının eşit olup olmadığını kontrol etmek için Bartlett testi uygulanır.
+
+```{r}
+bartlett.test(Puan ~ Okul, data = veri69)
+```
+
+## Interpretation of Homogeneity Test
+
+[EN] Since the p-value is greater than 0.05, the variances are equal.
+
+[TR] p-değeri 0.05’ten büyük olduğu için varyanslar eşittir.
+
+## Test Selection
+
+[EN] Since both assumptions are satisfied, standard One-Way ANOVA is applied.
+
+[TR] Her iki varsayım sağlandığı için standart tek yönlü ANOVA uygulanır.
+
+## One-Way ANOVA
+
+```{r}
+anova_model <- aov(Puan ~ Okul, data = veri69)
+summary(anova_model)
+```
+
+## Final Interpretation
+
+[EN] Since the p-value is greater than 0.05, the null hypothesis cannot be rejected. There is no statistically significant difference between the groups.
+
+[TR] p-değeri 0.05’ten büyük olduğu için sıfır hipotezi reddedilemez. Gruplar arasında istatistiksel olarak anlamlı bir fark yoktur.
+
+## Post-hoc Decision
+
+[EN] Since no significant difference is found, there is no need for a post-hoc test.
+
+[TR] Anlamlı fark bulunmadığı için post-hoc test yapılmasına gerek yoktur.
